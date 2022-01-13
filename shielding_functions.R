@@ -14,7 +14,8 @@ gen.data <- function(x, wts = NA){
 }
 
 # Function to pull necessary data
-pull_question_data <- function(keyword, qstoignore = c(), omitnans = FALSE, weighted = TRUE) {
+pull_question_data <- function(keyword, qstoignore = c(), omitnans = FALSE) {
+ 
   subq <- cs %>% select(contains(keyword), RescaledWeight) %>%  
     select(-qstoignore)
   if(omitnans){
@@ -22,19 +23,24 @@ pull_question_data <- function(keyword, qstoignore = c(), omitnans = FALSE, weig
   }
   wts <- subq$RescaledWeight
   subq %<>% select(-RescaledWeight)
-  if(weighted == TRUE){
-    subq_count <- data.frame(apply(subq, 2, gen.data, wts=wts))
-  } else {
-    subq_count <- data.frame(apply(subq, 2, gen.data))
-  }
+  
+  ## Do both weighted and non-weighted
+  subq_count_w <- data.frame(apply(subq, 2, gen.data, wts=wts))
+  subq_count <- data.frame(apply(subq, 2, gen.data))
   
   answers <- row.names(subq_count)
+  subq_count_w %<>% dplyr::mutate(Answer = answers) %>% 
+    reshape2::melt() %>% 
+    dplyr::rename(Question = variable,
+                  `Weighted` = value)
   subq_count %<>% dplyr::mutate(Answer = answers) %>% 
     reshape2::melt() %>% 
     dplyr::rename(Question = variable,
-                  `Number of Individuals` = value)
+                  `Non-weighted` = value)
   
-  return(subq_count)
+  output <- left_join(subq_count, subq_count_w)
+  
+  return(output)
   
 }
 
@@ -48,7 +54,7 @@ add_percentages <- function(df, addna = TRUE, naans = "Not applicable"){
     df <- df[order(df$Question, df$Answer),]
   }
   for(q in unique(df$Question)){
-    nums <- df$`Number of Individuals`[df$Question == q & df$Answer != naans]
+    nums <- df$`Weighted`[df$Question == q & df$Answer != naans]
     denom <- sum(nums)
     percs = 100*nums/denom
     
@@ -58,7 +64,7 @@ add_percentages <- function(df, addna = TRUE, naans = "Not applicable"){
     newcol <- c(newcol, percs) # Last NA for the non applicable column
   }
   
-  df$Percentages <- newcol
+  df$`Weighted %` <- newcol
   
   return(df)
 }
