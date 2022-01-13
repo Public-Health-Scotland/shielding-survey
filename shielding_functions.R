@@ -18,9 +18,7 @@ pull_question_data <- function(keyword, qstoignore = c()) {
  
   subq <- cs %>% select(contains(keyword), RescaledWeight) %>%  
     select(-qstoignore)
-#  if(omitnans){
-#    subq %<>% na.omit() 
-#  }
+
   wts <- subq$RescaledWeight
   subq %<>% select(-RescaledWeight)
   
@@ -40,17 +38,21 @@ pull_question_data <- function(keyword, qstoignore = c()) {
   
   output <- left_join(subq_count, subq_count_w)
   
+  ## Before returning output, check the total participants
+  check_total_participants(output, multivar = TRUE)
+  
+  
   return(output)
   
 }
 
 
 # Function to add percentages
-add_percentages <- function(df){
+add_percentages <- function(df, multivar=TRUE){
   
   naans = c("Not applicable", "NA", "N/A", 
             "I am not sure / Not applicable",
-            "I am not sure")   ## Possible not applicable answers
+            "I am not sure", NA)   ## Possible not applicable answers
   
   # Define not in operator
   `%!in%` <- Negate(`%in%`)
@@ -69,23 +71,39 @@ add_percentages <- function(df){
   }
   
   df$Answer <- factor(df$Answer, levels=c(unique(df$Answer)[unique(df$Answer) %!in% naans], naans))
-    
-  df <- df[order(df$Question, df$Answer),]
   
-  for(q in unique(df$Question)){
-    num_naan_q <- num_naan
+  
+  if(multivar==TRUE){
     
-    nums <- df$`Weighted`[df$Question == q & df$Answer %!in% naans]
+    df <- df[order(df$Question, df$Answer),]
+    
+    for(q in unique(df$Question)){
+      num_naan_q <- num_naan
+      
+      nums <- df$`Weighted`[df$Question == q & df$Answer %!in% naans]
+      denom <- sum(nums)
+      percs <- 100*nums/denom
+      
+      # Add NA in % column for as many nan answers as there are
+      while(num_naan_q > 0){
+        num_naan_q <- num_naan_q -1
+        percs <- c(percs, NA)
+      }
+      
+      newcol <- c(newcol, percs) # Last NA for the non applicable column
+    }
+  }else{
+
+    df <- df[order(df$Answer),]
+    nums <- df$`Weighted`[df$Answer %!in% naans]
     denom <- sum(nums)
-    percs = 100*nums/denom
+    percs <- 100*nums/denom
     
-    # Add NA in % column for as many nan answers as there are
-    while(num_naan_q > 0){
-      num_naan_q <- num_naan_q -1
+    while(num_naan >0){
+      num_naan <- num_naan -1
       percs <- c(percs, NA)
     }
-
-    newcol <- c(newcol, percs) # Last NA for the non applicable column
+    newcol <- c(newcol, percs)
   }
   
   df$`Weighted %` <- newcol
@@ -98,19 +116,29 @@ add_percentages <- function(df){
 
 one_var_table <- function(varname){
   
-  tab <- questionr::wtd.table(cs[varname], weights = cs["RescaledWeight"]) %>% 
-    as.data.frame() 
-  
-  tab %<>% mutate(`Weighted %` = 100*(Freq/sum(tab$Freq))) %>% 
-    dplyr::rename(`Weighted` = Freq) 
-  
-  tab_notw <- table(cs[varname]) %>% 
+  tab <- questionr::wtd.table(cs[,varname], 
+                              weights = cs$RescaledWeight, 
+                              useNA = "ifany") %>% 
     as.data.frame() %>% 
-    dplyr::rename(`Not weighted` = Freq)
+    dplyr::rename(`Weighted` = Freq)
   
+  ## Add weighted percentage
+  #tab %<>% mutate(`Weighted %` = 100*(Freq/sum(tab$Freq))) %>% 
+ # tab %<>%   dplyr::rename(`Weighted` = Freq) 
+
+  tab_notw <- table(cs[,varname], useNA = "ifany") %>% 
+    as.data.frame() %>% 
+    dplyr::rename(`Non-weighted` = Freq)
+
   output <- left_join(tab_notw, tab) 
-  
+
   output %<>% dplyr::rename(Answer = Var1) 
+  
+  output %<>% add_percentages(multivar=FALSE) 
+
+  ## Before returning output, check the total participants
+  check_total_participants(output)
+  
 
   write.csv(output, glue("Frequency tables/{varname}.csv"), row.names=FALSE)
   
