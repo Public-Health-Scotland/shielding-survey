@@ -68,3 +68,30 @@ add_percentages <- function(df, addna = TRUE, naans = "Not applicable"){
   
   return(df)
 }
+
+
+# Function to do basic 1 variable table
+
+one_var_table <- function(varname){
+  
+  tab <- questionr::wtd.table(cs[varname], weights = cs["RescaledWeight"]) %>% 
+    as.data.frame() 
+  
+  tab %<>% mutate(`Weighted %` = 100*(Freq/sum(tab$Freq))) %>% 
+    dplyr::rename(`Weighted` = Freq) 
+  
+  tab_notw <- table(cs[varname]) %>% 
+    as.data.frame() %>% 
+    dplyr::rename(`Not weighted` = Freq)
+  
+  output <- left_join(tab_notw, tab) 
+  
+  output %<>% dplyr::rename(Answer = Var1) 
+  
+  View(output)
+  
+  write.csv(output, glue("Frequency tables/{varname}.csv"), row.names=FALSE)
+  
+}
+
+
