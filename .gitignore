@@ -1,5 +1,6 @@
 # gitignore
 .Rproj.user
+*.Rproj
 .Rhistory
 .RData
 .Ruserdata
@@ -14,6 +15,4 @@ data/
 # R data files #
 *.[rR][dD][aA][tT][aA]
 *.[rR][dD][sS]
-weighting.Rproj
-survey_keyring.R
-create_weighting_keyring.R
+
