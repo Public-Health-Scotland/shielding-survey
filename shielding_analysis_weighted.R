@@ -7,7 +7,7 @@ library(magrittr)
 library(tidyr)
 library(dplyr)
 library(janitor)
-
+library(glue)
 
 # Getting functions for making summary tables
 setwd("~/shielding-survey")
@@ -183,204 +183,25 @@ whyhighriskother <- cs %>% select(HighRiskOtherReason) %>%  na.omit()
 
 write.csv(whyhighriskother, "Frequency tables/ListOfOtherHighRisk.csv", row.names=FALSE)
 
-##### Advised GP Immunosuppressed
+##### Tables for single variable breakdowns
 
-gpimm <- questionr::wtd.table(cs$AdvisedGPImmunosuppressed, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(gpimm$Freq))) %>% 
-  dplyr::rename(`AdvisedGPImmunosuppressed` = Var1, `Weighted count` = Freq) 
+one_var_names <- c("AdvisedGPImmunosuppressed", "WhenAdvisedHighRisk", "DifficultyGettingSocialCareSupport",
+                   "CurrentApproachToManagingRisk", "HowSeeFuture", "AgeGroup", "Gender", "Ethnicity",
+                   "Carer", "Vaccinated", "ScotlandRegion", "UnexpectedExpenseDifficulty", "InternetAccess",
+                   ## New variables
+                   "AgeGroup2", "Impairment", "ChildrenInHousehold", "NumberInHousehold", "SeverelyImmunosuppressed",
+                   "WorriedButNoLongerHighestRisk", "SurveySubject")
 
-write.csv(gpimm, "Frequency tables/AdvisedGPImmunosuppressed.csv", row.names=FALSE)
+for(varname in one_var_names){
+  one_var_table(varname)
+}
 
-##### When Advised High risk
-
-when <- questionr::wtd.table(cs$WhenAdvisedHighRisk, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(when$Freq))) %>% 
-  dplyr::rename(`WhenAdvisedHighRisk` = Var1, `Weighted count` = Freq)
-
-write.csv(when, "Frequency tables/WhenAdvisedHighRisk.csv", row.names=FALSE)
-
-##### Difficulty getting social care support
-
-diffic <- questionr::wtd.table(cs$DifficultyGettingSocialCareSupport, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(diffic$Freq))) %>% 
-  dplyr::rename(`DifficultyGettingSocialCareSupport` = Var1, `Weighted count` = Freq)
-
-write.csv(diffic, "Frequency tables/DifficultyGettingSocialCareSupport.csv", row.names=FALSE)
-
-##### Current approach to managing risk
-
-currappr <- questionr::wtd.table(cs$CurrentApproachToManagingRisk, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(currappr$Freq))) %>% 
-  dplyr::rename(`CurrentApproachToManagingRisk` = Var1, `Weighted count` = Freq)
-
-write.csv(currappr, "Frequency tables/CurrentApproachToManagingRisk.csv", row.names=FALSE)
-
-##### How see the future
-
-futuresee <- questionr::wtd.table(cs$HowSeeFuture, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(futuresee$Freq))) %>% 
-  dplyr::rename(`HowSeeFuture` = Var1, `Weighted count` = Freq)
-
-write.csv(futuresee, "Frequency tables/HowSeeFuture.csv", row.names=FALSE)
-
-##### AgeGroup
-
-agegrp1 <- questionr::wtd.table(cs$AgeGroup, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(agegrp1$Freq))) %>% 
-  dplyr::rename(`Age Group` = Var1, `Weighted count` = Freq)
-
-write.csv(agegrp1, "Frequency tables/AgeGroup.csv", row.names=FALSE)
-
-
-##### Gender
-
-gender <- questionr::wtd.table(cs$Gender, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(gender$Freq))) %>% 
-  dplyr::rename(`Gender` = Var1, `Weighted count` = Freq)
-
-write.csv(gender, "Frequency tables/Gender.csv", row.names=FALSE)
-
-##### Ethnicity
-
-ethnicity <- questionr::wtd.table(cs$Ethnicity, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(ethnicity$Freq))) %>% 
-  dplyr::rename(`Ethnicity` = Var1, `Weighted count` = Freq)
-
-write.csv(ethnicity, "Frequency tables/Ethnicity.csv", row.names=FALSE)
-
-
-##### Carer
-
-carer <- questionr::wtd.table(cs$Carer, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(carer$Freq))) %>% 
-  dplyr::rename(`Carer` = Var1, `Weighted count` = Freq)
-
-write.csv(carer, "Frequency tables/Carer.csv", row.names=FALSE)
-
-##### Vaccinated
-
-vacc <- questionr::wtd.table(cs$Vaccinated, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(vacc$Freq))) %>% 
-  dplyr::rename(`Vaccinated` = Var1, `Weighted count` = Freq)
-
-write.csv(vacc, "Frequency tables/Vaccinated.csv", row.names=FALSE)
-
-##### Scotland region
-
-region <- questionr::wtd.table(cs$ScotlandRegion, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(region$Freq))) %>% 
-  dplyr::rename(`ScotlandRegion` = Var1, `Weighted count` = Freq)
-
-write.csv(region, "Frequency tables/ScotlandRegion.csv", row.names=FALSE)
-
-##### Unexpected expense difficulty
-
-unex <- questionr::wtd.table(cs$UnexpectedExpenseDifficulty, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(unex$Freq))) %>% 
-  dplyr::rename(`UnexpectedExpenseDifficulty` = Var1, `Weighted count` = Freq)
-
-write.csv(unex, "Frequency tables/UnexpectedExpenseDifficulty.csv", row.names=FALSE)
-
-##### Internet
-
-internet <- questionr::wtd.table(cs$InternetAccess, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(internet$Freq))) %>% 
-  dplyr::rename(`InternetAccess` = Var1, `Weighted count` = Freq)
-
-write.csv(internet, "Frequency tables/InternetAccess.csv", row.names=FALSE)
-
-
-########################################
-############ NEW VARIABLES #############
-########################################
-
-
-##### New age group
-
-agegrp <- questionr::wtd.table(cs$AgeGroup2, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(agegrp$Freq))) %>% 
-  dplyr::rename(`Age Group` = Var1, `Weighted count` = Freq)
-
-write.csv(agegrp, "Frequency tables/NewAgeGroup.csv", row.names=FALSE)
-
-##### Impairment
-
-imp <- questionr::wtd.table(cs$Impairment, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(imp$Freq))) %>% 
-  dplyr::rename(`Impairment` = Var1, `Weighted count` = Freq)
-
-write.csv(imp, "Frequency tables/Impairment.csv", row.names=FALSE)
-
-## More specific
-
+##### More specific list for impairment
 imp2 <- pull_question_data("Impairment", qstoignore = c("Impairment")) %>% 
   add_percentages(addna=FALSE)
 
 write.csv(imp2, "Frequency tables/ImpairmentBreakdown.csv", row.names=FALSE)
 
-
-
-##### Children in household
-
-cih <- questionr::wtd.table(cs$ChildrenInHousehold, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(cih$Freq))) %>% 
-  dplyr::rename(`Children in household` = Var1, `Weighted count` = Freq)
-
-write.csv(cih, "Frequency tables/ChildrenInHousehold.csv", row.names=FALSE)
-
-##### Number in household
-
-nih <- questionr::wtd.table(cs$NumberInHousehold, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(nih$Freq))) %>% 
-  dplyr::rename(`Number in household` = Var1, `Weighted count` = Freq)
-
-write.csv(nih, "Frequency tables/NumberInHousehold.csv", row.names=FALSE)
-
-##### Severely immunosuppressed
-
-severeimmuno <- questionr::wtd.table(cs$SeverelyImmunosuppressed, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(severeimmuno$Freq))) %>% 
-  dplyr::rename(`Severely Immunosuppressed` = Var1, `Weighted count` = Freq)
-
-write.csv(severeimmuno, "Frequency tables/SeverelyImmunosuppressed.csv", row.names=FALSE)
-
-
-##### Worried but no longer highest risk
-
-worried <- questionr::wtd.table(cs$WorriedButNoLongerHighestRisk, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(worried$Freq))) %>% 
-  dplyr::rename(`Worried but no longer highest risk` = Var1, `Weighted count` = Freq)
-
-write.csv(worried, "Frequency tables/WorriedButNoLongerHighestRisk.csv", row.names=FALSE)
-
-
-##### Survey subject
-
-subject <- questionr::wtd.table(cs$SurveySubject, weights = cs$RescaledWeight) %>% 
-  as.data.frame() %>% 
-  mutate(Percentage = 100*(Freq/sum(subject$Freq))) %>% 
-  dplyr::rename(`SurveySubject` = Var1, `Weighted count` = Freq)
-
-write.csv(subject, "Frequency tables/SurveySubject.csv", row.names=FALSE)
 
 
 

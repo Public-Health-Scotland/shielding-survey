@@ -88,8 +88,6 @@ one_var_table <- function(varname){
   
   output %<>% dplyr::rename(Answer = Var1) 
   
-  View(output)
-  
   write.csv(output, glue("Frequency tables/{varname}.csv"), row.names=FALSE)
   
 }
