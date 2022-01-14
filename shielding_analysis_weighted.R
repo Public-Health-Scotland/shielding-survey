@@ -8,6 +8,7 @@ library(tidyr)
 library(dplyr)
 library(janitor)
 library(glue)
+library(tidyverse)
 
 # Getting functions for making summary tables
 setwd("~/shielding-survey")
@@ -49,25 +50,25 @@ write.csv(hr_count, "Frequency tables/HighRiskNegatives.csv", row.names=FALSE)
 
 ##### High risk positives
 
-hrp_count <- pull_question_data("HRP", qstoignore = c("HRPOther")) %>%  add_percentages(addna=FALSE)
+hrp_count <- pull_question_data("HRP", qstoignore = c("HRPOther")) %>%  add_percentages()
 
 write.csv(hrp_count, "Frequency tables/HighRiskPositives.csv", row.names=FALSE)
 
 ##### Useful
 
-useful <- pull_question_data("Useful", qstoignore = c("UsefulOther")) %>% add_percentages(naans = "N/A")
+useful <- pull_question_data("Useful", qstoignore = c("UsefulOther")) %>% add_percentages()
 
 write.csv(useful, "Frequency tables/Useful.csv", row.names=FALSE)
 
 ##### Approach
 
-approach <- pull_question_data("Approach", qstoignore = c("CurrentApproachToManagingRisk")) %>% add_percentages(naans = "I am not sure / Not applicable")
+approach <- pull_question_data("Approach", qstoignore = c("CurrentApproachToManagingRisk")) %>% add_percentages()
 
 write.csv(approach, "Frequency tables/Approach.csv", row.names=FALSE)
 
 ##### SG
 
-sg <- pull_question_data("SG", qstoignore = c("ApproachNoDependenceSGovAdvice")) %>% add_percentages(naans = "I am not sure / Not applicable")
+sg <- pull_question_data("SG", qstoignore = c("ApproachNoDependenceSGovAdvice")) %>% add_percentages()
 
 write.csv(sg, "Frequency tables/ScottishGovernment.csv", row.names=FALSE)
 
@@ -103,7 +104,7 @@ diff1 <- pull_question_data("Diff", qstoignore = c("DifficultyGettingSocialCareS
                                                    "DiffPriorityVaccineHousehold",
                                                    "DiffLFTAccess",
                                                    "DiffVitDAccess")) %>% 
-  add_percentages(addna = FALSE)
+  add_percentages()
 
 
 diff2 <- pull_question_data("Diff", qstoignore = c("DifficultyGettingSocialCareSupport",
@@ -116,7 +117,7 @@ diff2 <- pull_question_data("Diff", qstoignore = c("DifficultyGettingSocialCareS
                                                    "DiffWorkplaceSafety",
                                                    "DiffInfoLocalCases",
                                                    "DiffHRVaccineEffectiveness")) %>% 
-  add_percentages(addna = FALSE)
+  add_percentages()
 
 
 diff <- rbind(diff1, diff2)
@@ -126,20 +127,20 @@ write.csv(diff, "Frequency tables/Diff.csv", row.names=FALSE)
 
 ##### Changes
 
-changes <- pull_question_data("Changes") %>% add_percentages(naans = "I am not sure / Not applicable")
+changes <- pull_question_data("Changes") %>% add_percentages()
 
 write.csv(changes, "Frequency tables/Changes.csv", row.names=FALSE)
 
 ##### Future
 
 future <- pull_question_data("Future", qstoignore = "HowSeeFuture") %>% 
-  add_percentages(naans = "I am not sure / Not applicable")
+  add_percentages()
 
 write.csv(future, "Frequency tables/Future.csv", row.names=FALSE)
 
 ##### Outdoor
 
-outdoor <- pull_question_data("Outdoor") %>% add_percentages(addna=FALSE)
+outdoor <- pull_question_data("Outdoor") %>% add_percentages()
 
 write.csv(outdoor, "Frequency tables/Outdoor.csv", row.names=FALSE)
 
@@ -147,8 +148,7 @@ write.csv(outdoor, "Frequency tables/Outdoor.csv", row.names=FALSE)
 
 employment <- pull_question_data("Employment", qstoignore = c("InitialShieldingEmployment",
                                                               "HRNEmployment",
-                                                             "EmploymentOther"),
-                                 omitnans = FALSE) %>% add_percentages(addna=FALSE)
+                                                             "EmploymentOther")) %>% add_percentages()
 
 write.csv(employment, "Frequency tables/Employment.csv", row.names=FALSE)
 
@@ -160,7 +160,7 @@ ad_count <- pull_question_data("AD", qstoignore = c("ADMissingSupport",
                                                     "WhenAdvisedHighRisk", 
                                                     "ApproachInfluenceFromShieldingAdvice", 
                                                     "ApproachNoDependenceSGovAdvice", "DiffClearYourHead")) %>%  
-  add_percentages(naans="I am not sure")
+  add_percentages()
 
 write.csv(ad_count, "Frequency tables/AgreeDisagree.csv", row.names=FALSE)
 
@@ -174,7 +174,7 @@ whyhighrisk <- pull_question_data(c("Cancer",
                                     "KidneyLiverSpleen",
                                     "AdvisedShieldGP",
                                     "NotSureWhyHighRisk")) %>% 
-  add_percentages(addna=FALSE)
+  add_percentages()
 
 write.csv(whyhighrisk, "Frequency tables/WhyHighRisk.csv", row.names=FALSE)
 
@@ -198,7 +198,7 @@ for(varname in one_var_names){
 
 ##### More specific list for impairment
 imp2 <- pull_question_data("Impairment", qstoignore = c("Impairment")) %>% 
-  add_percentages(addna=FALSE)
+  add_percentages()
 
 write.csv(imp2, "Frequency tables/ImpairmentBreakdown.csv", row.names=FALSE)
 
