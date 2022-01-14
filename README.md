@@ -1,8 +1,8 @@
-### Analysis of high risk group shielding survey for Public Health Scotland
+## Analysis of high risk group shielding survey for Public Health Scotland
 
-## Workflow
+# Workflow
 
-1. The uncleaned survey data is confidential so unprovided, but is stored locally in a password protected spreadsheet
+1. The uncleaned survey data are confidential so unprovided, but are stored locally in a password protected spreadsheet
 2. The script cleaning_and_weighting.R cleans the raw data and calculates the rescaled weight by age group and sex by comparing to population fractions for the high risk group. 
     - We applied the following restrictions to remove entries from the survey
         - Require "Do you agree to take part in this survey" = "Yes"
