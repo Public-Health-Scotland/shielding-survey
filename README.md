@@ -23,7 +23,14 @@
         - The output is saved as the RescaledWeight column
         - Note that the sum of all the rescaled weights is equal to the number in the survey, as expected
         - N.B. the Weight and Weight_cutoff columns are not used as weights, and are there for comparison
-3. We then made frequency tables of the different variables and groups of variables, both weighted and unweighted. This is done using the script shielding_analysis_weighted.R
+3. We created new variables from the existing ones using the shielding_new_variables.R script. Specifically these are
+    - AgeGroup2: different age grouping 0-15, 16-64 and 65+
+    - Impairment: one or more of listed impairments
+    - ChildrenInHousehold: children or no children
+    - NumberInHousehold: 1, 2 or 3+
+    - SeverelyImmunosuppressed: based off SeverelyImmunosuppressed and AdvisedGPImmunosuppressed
+    - WorriedButNoLongerHighestRisk: based off CurrentApproachToManagingRisk and SeverelyImmunosuppressed
+5. We then made frequency tables of the different variables and groups of variables, both weighted and unweighted. This is done using the script shielding_analysis_weighted.R
 
 
 
