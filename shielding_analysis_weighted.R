@@ -197,7 +197,7 @@ for(varname in one_var_names){
 }
 
 ##### More specific list for impairment
-imp2 <- pull_question_data("Impairment", qstoignore = c("Impairment")) %>% 
+imp2 <- pull_question_data(c("Impairment", "LearningDifficulty"), qstoignore = c("Impairment"), checktotals=FALSE) %>% 
   add_percentages()
 
 write.csv(imp2, "Frequency tables/ImpairmentBreakdown.csv", row.names=FALSE)

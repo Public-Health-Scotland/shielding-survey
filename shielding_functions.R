@@ -1,20 +1,20 @@
-# Shielding functions (weighted)
+# Shielding functions
 
 
 # Function to get counts from data
 gen.data <- function(x, wts = NA){
   
   if(!is.na(wts)){
-    out <- questionr::wtd.table(x, weights = wts, useNA = "always")
+    out <- questionr::wtd.table(x, weights = wts, useNA = "ifany")
   } else {
-    out <- table(x, useNA = "always")
+    out <- table(x, useNA = "ifany")
   }
   
   return(out)
 }
 
 # Function to pull necessary data
-pull_question_data <- function(keyword, qstoignore = c()) {
+pull_question_data <- function(keyword, qstoignore = c(), checktotals = TRUE) {
  
   subq <- cs %>% select(contains(keyword), RescaledWeight) %>%  
     select(-qstoignore)
@@ -39,7 +39,10 @@ pull_question_data <- function(keyword, qstoignore = c()) {
   output <- left_join(subq_count, subq_count_w)
   
   ## Before returning output, check the total participants
-  check_total_participants(output, multivar = TRUE)
+  if(checktotals){
+    check_total_participants(output, multivar = TRUE)
+  }
+  
   
   
   return(output)
@@ -178,19 +181,7 @@ check_total_participants <- function(check_table, multivar=FALSE){
       if(sum_w != expected_total){
         warning(glue("Expected total {expected_total} but for Question: {question} got weighted total: {sum_w}"))
       }
-      
     }
-    
-    
   }
   
-  
 }
-
-
-
-
-
-
-
-
