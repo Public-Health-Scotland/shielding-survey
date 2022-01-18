@@ -14,7 +14,7 @@ gen.data <- function(x, wts = NA){
 }
 
 # Function to pull necessary data
-pull_question_data <- function(keyword, qstoignore = c(), checktotals = TRUE) {
+pull_question_data <- function(keyword, qstoignore = c(), checktotals = TRUE, multivar=TRUE) {
  
   subq <- cs %>% select(contains(keyword), RescaledWeight) %>%  
     select(-qstoignore)
@@ -40,7 +40,7 @@ pull_question_data <- function(keyword, qstoignore = c(), checktotals = TRUE) {
   
   ## Before returning output, check the total participants
   if(checktotals){
-    check_total_participants(output, multivar = TRUE)
+    check_total_participants(output, multivar = multivar)
   }
   
   
@@ -172,8 +172,8 @@ check_total_participants <- function(check_table, multivar=FALSE){
     questions <- unique(check_table$Question)
     
     for(question in questions){
-      sum_nw <- sum(is_count[is_count$Question == question,]$`Non-weighted`)
-      sum_w <- sum(is_count[is_count$Question == question,]$`Weighted`)
+      sum_nw <- sum(check_table[check_table$Question == question,]$`Non-weighted`)
+      sum_w <- sum(check_table[check_table$Question == question,]$`Weighted`)
       
       if(sum_nw != expected_total){
         warning(glue("Expected total {expected_total} but for Question: {question} got non-weighted total: {sum_nw}"))
