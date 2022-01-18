@@ -173,7 +173,9 @@ whyhighrisk <- pull_question_data(c("Cancer",
                                     "PregnantAnd",
                                     "KidneyLiverSpleen",
                                     "AdvisedShieldGP",
-                                    "NotSureWhyHighRisk")) %>% 
+                                    "NotSureWhyHighRisk",
+                                    "SevereRespiratory",
+                                    "ImmunosuppressionTherapy")) %>% 
   add_percentages()
 
 write.csv(whyhighrisk, "Frequency tables/WhyHighRisk.csv", row.names=FALSE)
