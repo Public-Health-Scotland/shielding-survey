@@ -17,24 +17,49 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
     }
   }
   
-  combined_tabs <- c()
   
   for (secondary_variable in secondary_variables){
     
     # Make separate tables for unweighted, weighted and weighted percentage for each 2ndary var
-    unwtd <- remove_dots(as.data.frame.matrix(table_by(reduced_survey, secondary_variable, primary_variable, useNA="no")))
-    wtd <- remove_dots(as.data.frame.matrix(table_by(reduced_survey, secondary_variable, primary_variable, weighted=TRUE,
-                                                     useNA="no")))
-    wtdpct <- remove_dots(as.data.frame.matrix(100*
-                                                 prop.table(table_by(reduced_survey, secondary_variable, primary_variable, 
-                                                                     weighted=TRUE, useNA="no"), 2)))
+    unwtd <- as.data.frame.matrix(table_by(reduced_survey, 
+                                           secondary_variable, 
+                                           primary_variable, 
+                                           useNA="no")) %>% 
+      remove_dots()
+    
+    wtd <- as.data.frame.matrix(table_by(reduced_survey, 
+                                         secondary_variable, 
+                                         primary_variable, 
+                                         weighted=TRUE,
+                                         useNA="no")) %>% 
+      remove_dots()
+    
+    wtdpct <- table_by(reduced_survey, secondary_variable, primary_variable, 
+                       weighted=TRUE, useNA="no")
+    
+    # Remove any NA answers for weighted %
+    naans = c("Not applicable", "NA", "N/A", 
+              "I am not sure / Not applicable",
+              "I am not sure", NA)   ## Possible not applicable answers
+    wtdpct <- wtdpct[!(row.names(wtdpct) %in% naans),]
+    wtdpct <- prop.table(wtdpct, 2) %>% as.data.frame.matrix() %>% remove_dots()
+    
+    
+    for(i in seq(length(row.names(wtd)))){
+      if(row.names(wtd)[i] %in% naans){
+        # Add new NA row
+        wtdpct[nrow(wtdpct)+1,] <- NA
+        row.names(wtdpct)[[i]] <- row.names(wtd)[i] 
+      }
+    }
     
     
     colnames(unwtd) <- paste(colnames(unwtd), " (unweighted)")
     colnames(wtd) <- paste(colnames(wtd), " (weighted)")
     colnames(wtdpct) <- paste(colnames(wtdpct), " (weighted %)")
     
-    combined <- cbind(unwtd, wtd, wtdpct)
+    combined <- cbind(unwtd, wtd, wtdpct) %>% remove_dots()
+    rownames(combined) <- rownames(unwtd)
     combined$SecondaryAnswer <- rownames(combined)
     combined %<>% relocate(SecondaryAnswer)
     combined$SecondaryVariable <- secondary_variable
@@ -75,10 +100,12 @@ table_by <- function(DF, row_var, col_var = NULL, weighted=FALSE, useNA="ifany")
   return(tbl)
 }
 
-# Removes dots from row names
+# Removes dots from row names and column names
 remove_dots <- function(tab){
   rownames(tab) <- str_replace_all(rownames(tab), "\\.", " ")
   rownames(tab) <- str_trim(rownames(tab))
+  colnames(tab) <- str_replace_all(colnames(tab), "\\.", " ")
+  colnames(tab) <- str_trim(colnames(tab))
   return(tab)
 }
 
