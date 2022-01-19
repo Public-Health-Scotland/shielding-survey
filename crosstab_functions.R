@@ -41,6 +41,7 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
     # Remove any NA answers for weighted %
     wtdpct <- wtdpct[!(row.names(wtdpct) %in% naans),]
     wtdpct <- prop.table(wtdpct, 2) %>% as.data.frame.matrix() %>% remove_dots()
+    wtdpct <- 100*wtdpct
    
     for(i in seq(length(row.names(wtd)))){
       if(row.names(wtd)[i] %in% naans){
