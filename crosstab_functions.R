@@ -43,17 +43,18 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
               "I am not sure", NA)   ## Possible not applicable answers
     wtdpct <- wtdpct[!(row.names(wtdpct) %in% naans),]
     wtdpct <- prop.table(wtdpct, 2) %>% as.data.frame.matrix() %>% remove_dots()
-    
-    
+   
     for(i in seq(length(row.names(wtd)))){
       if(row.names(wtd)[i] %in% naans){
         # Add new NA row
         wtdpct[nrow(wtdpct)+1,] <- NA
-        row.names(wtdpct)[[i]] <- row.names(wtd)[i] 
+        row.names(wtdpct)[nrow(wtdpct)] <- row.names(wtd)[i] 
       }
     }
     
-    
+    wtd <- wtd[row.names(unwtd), ]
+    wtdpct <- wtdpct[row.names(unwtd), ]
+
     colnames(unwtd) <- paste(colnames(unwtd), " (unweighted)")
     colnames(wtd) <- paste(colnames(wtd), " (weighted)")
     colnames(wtdpct) <- paste(colnames(wtdpct), " (weighted %)")
@@ -102,6 +103,7 @@ table_by <- function(DF, row_var, col_var = NULL, weighted=FALSE, useNA="ifany")
 
 # Removes dots from row names and column names
 remove_dots <- function(tab){
+  rownames(tab) <- replace_na(rownames(tab),"NA")
   rownames(tab) <- str_replace_all(rownames(tab), "\\.", " ")
   rownames(tab) <- str_trim(rownames(tab))
   colnames(tab) <- str_replace_all(colnames(tab), "\\.", " ")
