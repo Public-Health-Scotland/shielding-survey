@@ -11,12 +11,13 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
   
   ## Filter for specific answers to some questions
   
-  if(!is.na(selections)){
-    for(var_to_reduce in names(selections)){
-      options_to_keep <- unlist(selections[[var_to_reduce]])
-      reduced_survey <- reduced_survey[reduced_survey[[var_to_reduce]] %in% options_to_keep, ]
-    }
-  }
+  #if(!is.na(selections)){
+  #  for(var_to_reduce in names(selections)){
+  #    options_to_keep <- unlist(selections[[var_to_reduce]])
+  #    reduced_survey <- reduced_survey[reduced_survey[[var_to_reduce]] %in% options_to_keep, ]
+   # }
+  #  message(glue("{nrow(cs)-nrow(reduced_survey)} rows removed for {primary_variable} from {nrow(cs)} to {nrow(reduced_survey)}"))
+  #}
   
   
   for (secondary_variable in secondary_variables){
