@@ -22,11 +22,11 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
   for (secondary_variable in secondary_variables){
     
     # Make separate tables for unweighted, weighted and weighted percentage for each 2ndary var
-    unwtd <- remove_dots(as.data.frame.matrix(table_by(secondary_variable, primary_variable, useNA="no")))
-    wtd <- remove_dots(as.data.frame.matrix(table_by(secondary_variable, primary_variable, weighted=TRUE,
+    unwtd <- remove_dots(as.data.frame.matrix(table_by(reduced_survey, secondary_variable, primary_variable, useNA="no")))
+    wtd <- remove_dots(as.data.frame.matrix(table_by(reduced_survey, secondary_variable, primary_variable, weighted=TRUE,
                                                      useNA="no")))
     wtdpct <- remove_dots(as.data.frame.matrix(100*
-                                                 prop.table(table_by(secondary_variable, primary_variable, 
+                                                 prop.table(table_by(reduced_survey, secondary_variable, primary_variable, 
                                                                      weighted=TRUE, useNA="no"), 2)))
     
     
@@ -51,13 +51,13 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
     
     
   }
-  print(stacked)
+
   write.csv(stacked, glue("Crosstabs/{primary_variable}.csv"), row.names=FALSE)
   
 }
 
 # Makes individual crosstabs
-table_by <- function(row_var, col_var = NULL, DF=reduced_survey, weighted=FALSE, useNA="ifany") {
+table_by <- function(DF, row_var, col_var = NULL, weighted=FALSE, useNA="ifany") {
   # the repeated t() below ensures you have a 4 x 1 matrix
   if (weighted){
     tbl <- if (is.null(col_var)) t(t(questionr::wtd.table(DF[[row_var]], 
