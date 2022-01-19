@@ -15,7 +15,7 @@ setwd("~/shielding-survey")
 source("shielding_functions.R")
 
 # Getting cleaned data
-cs <- openxlsx::read.xlsx("~/weighting/survey_with_new_vars.xlsx")
+cs <- openxlsx::read.xlsx("survey_with_new_vars.xlsx")
 
 
 ##### Initial shielding
