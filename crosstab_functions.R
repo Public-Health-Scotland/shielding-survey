@@ -1,6 +1,7 @@
 # -----------------------------
 # Functions to make crosstabs
 # -----------------------------
+source("shielding_functions.R")
 
 make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
   
@@ -38,9 +39,6 @@ make_crosstab <- function(primary_variable, secondary_variables, selections=NA){
                        weighted=TRUE, useNA="no")
     
     # Remove any NA answers for weighted %
-    naans = c("Not applicable", "NA", "N/A", 
-              "I am not sure / Not applicable",
-              "I am not sure", NA)   ## Possible not applicable answers
     wtdpct <- wtdpct[!(row.names(wtdpct) %in% naans),]
     wtdpct <- prop.table(wtdpct, 2) %>% as.data.frame.matrix() %>% remove_dots()
    
