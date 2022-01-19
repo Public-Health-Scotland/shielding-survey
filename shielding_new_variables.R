@@ -8,7 +8,7 @@ library(tidyr)
 library(dplyr)
 library(janitor)
 
-setwd("~/weighting")
+setwd("~/shielding-survey")
 
 # Confidential answers in separate file
 # Contains the vectors of answers
@@ -21,12 +21,17 @@ setwd("~/weighting")
 source("new_var_answers.R")
 
 # Getting cleaned data
-cs <- read.xlsx("~/weighting/cleaned_survey.xlsx")
+cs <- read.xlsx("cleaned_survey.xlsx")
 
           
 
 cs %<>% 
   ### Age groups
+  mutate(AgeGroup3 = case_when(is.na(AgeGroup) ~ "unknown",
+                               AgeGroup %in% c("Under 16", "16-24", "25-44", "45-64") ~ "<65",
+                               AgeGroup %in% c("65-69", "70-74", "75-79", "80+") ~ "65+"
+  )
+  ) %>% 
   mutate(AgeGroup2 = case_when(is.na(AgeGroup) ~ "unknown",
                                      AgeGroup == "Under 16" ~ "0-15",
                                      AgeGroup %in% c("16-24", "25-44", "45-64") ~ "16-64",
@@ -77,6 +82,18 @@ cs %<>%
   mutate(WorriedButNoLongerHighestRisk = case_when(
     (grepl("I still", CurrentApproachToManagingRisk) & (SeverelyImmunosuppressed != "Yes")) ~ "Yes",
     TRUE ~ "No"
+  )) %>% 
+  ### Employment
+  mutate(Employment = case_when(
+                                EmploymentEmployed == "Yes" ~ "Employed",
+                                EmploymentSelfEmployed == "Yes" ~ "Self employed",
+                                EmploymentEducation == "Yes" ~ "Education",
+                                EmploymentRetired == "Yes" ~ "Retired",
+                                EmploymentLookingAfterHomeOrFamily == "Yes" ~ "Looking after home or family",
+                                EmploymentNotWorkingDisabilityOrCondition == "Yes" ~ "Not working due to disability or condition",
+                                EmploymentOther == "Yes" ~ "Other",
+                                TRUE ~ "unknown"
+    
   ))
 
 
