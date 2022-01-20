@@ -92,6 +92,7 @@ cs %<>%
                                 EmploymentLookingAfterHomeOrFamily == "Yes" ~ "Looking after home or family",
                                 EmploymentNotWorkingDisabilityOrCondition == "Yes" ~ "Not working due to disability or condition",
                                 EmploymentOther == "Yes" ~ "Other",
+                                EmploymentUnemployed == "Yes" ~ "Unemployed",
                                 TRUE ~ "unknown"
     
   ))
