@@ -1,6 +1,12 @@
 # ----------------
 # Making crosstabs
 # ----------------
+library(magrittr)
+library(tidyr)
+library(dplyr)
+library(janitor)
+library(tidyverse)
+library(glue)
 
 # Get necessary functions
 source("crosstab_functions.R")
@@ -123,6 +129,7 @@ make_crosstab(primary_variable, secondary_variables, selections)
 # ---------------------------------------------------------------------------------------------
 primary_variable <- "Employment"
 secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
                          "InitialShieldingEmployment", "InitialShieldingEducation",
                           "WorriedButNoLongerHighestRisk",
                          "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
@@ -132,6 +139,85 @@ secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMenta
 selections <- NA
 
 make_crosstab(primary_variable, secondary_variables, selections)
+
+primary_variable <- "EmploymentEmployed"
+secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
+                         "InitialShieldingEmployment", "InitialShieldingEducation",
+                         "WorriedButNoLongerHighestRisk",
+                         "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
+                         "DifficultyGettingSocialCareSupport","UsefulReturnWorkNewJobSupport",
+                         "UsefulReturnEducationSupport", "SGSafeToWork", "SGSafeYoungSchoolUniChildcare",
+                         "HRPEmployerFlexibility", "HRPEducationFlexibility")
+selections <- NA
+
+make_crosstab(primary_variable, secondary_variables, selections)
+
+primary_variable <- "EmploymentRetired"
+secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
+                         "InitialShieldingEmployment", "InitialShieldingEducation",
+                         "WorriedButNoLongerHighestRisk",
+                         "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
+                         "DifficultyGettingSocialCareSupport","UsefulReturnWorkNewJobSupport",
+                         "UsefulReturnEducationSupport", "SGSafeToWork", "SGSafeYoungSchoolUniChildcare",
+                         "HRPEmployerFlexibility", "HRPEducationFlexibility")
+selections <- NA
+
+make_crosstab(primary_variable, secondary_variables, selections)
+
+primary_variable <- "EmploymentUnemployed"
+secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
+                         "InitialShieldingEmployment", "InitialShieldingEducation",
+                         "WorriedButNoLongerHighestRisk",
+                         "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
+                         "DifficultyGettingSocialCareSupport","UsefulReturnWorkNewJobSupport",
+                         "UsefulReturnEducationSupport", "SGSafeToWork", "SGSafeYoungSchoolUniChildcare",
+                         "HRPEmployerFlexibility", "HRPEducationFlexibility")
+selections <- NA
+
+make_crosstab(primary_variable, secondary_variables, selections)
+
+primary_variable <- "EmploymentLookingAfterHomeOrFamily"
+secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
+                         "InitialShieldingEmployment", "InitialShieldingEducation",
+                         "WorriedButNoLongerHighestRisk",
+                         "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
+                         "DifficultyGettingSocialCareSupport","UsefulReturnWorkNewJobSupport",
+                         "UsefulReturnEducationSupport", "SGSafeToWork", "SGSafeYoungSchoolUniChildcare",
+                         "HRPEmployerFlexibility", "HRPEducationFlexibility")
+selections <- NA
+
+make_crosstab(primary_variable, secondary_variables, selections)
+
+primary_variable <- "EmploymentNotWorkingDisabilityOrCondition"
+secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
+                         "InitialShieldingEmployment", "InitialShieldingEducation",
+                         "WorriedButNoLongerHighestRisk",
+                         "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
+                         "DifficultyGettingSocialCareSupport","UsefulReturnWorkNewJobSupport",
+                         "UsefulReturnEducationSupport", "SGSafeToWork", "SGSafeYoungSchoolUniChildcare",
+                         "HRPEmployerFlexibility", "HRPEducationFlexibility")
+selections <- NA
+
+make_crosstab(primary_variable, secondary_variables, selections)
+
+primary_variable <- "EmploymentEducation"
+secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
+                         "InitialShieldingQualityOfCare",
+                         "InitialShieldingEmployment", "InitialShieldingEducation",
+                         "WorriedButNoLongerHighestRisk",
+                         "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
+                         "DifficultyGettingSocialCareSupport","UsefulReturnWorkNewJobSupport",
+                         "UsefulReturnEducationSupport", "SGSafeToWork", "SGSafeYoungSchoolUniChildcare",
+                         "HRPEmployerFlexibility", "HRPEducationFlexibility")
+selections <- NA
+
+make_crosstab(primary_variable, secondary_variables, selections)
+
 # ---------------------------------------------------------------------------------------------
 # Worried but no longer at highest risk
 # ---------------------------------------------------------------------------------------------
@@ -143,14 +229,14 @@ secondary_variables <- c("UsefulMentalHealthSupport","UsefulPhysicalHealthSuppor
                          "FutureHRWebpage", "FutureChiefMedicalOfficerLetter", "FutureSMSShieldingUpdates",
                          "FutureHRGroup" )
 selections <- NA
-
+gitcreds::gitcreds_set()
 make_crosstab(primary_variable, secondary_variables, selections)
 # ---------------------------------------------------------------------------------------------
 # Severely immunosuppressed
 # ---------------------------------------------------------------------------------------------
 primary_variable <- "SeverelyImmunosuppressed"
 secondary_variables <- c("UsefulMentalHealthSupport","UsefulPhysicalHealthSupport",  "UsefulReturnWorkNewJobSupport",
-                         "UsefulReturnEducationSupport", 
+                         "UsefulReturnEducationSupport", "ChangesEndFreeFoodBoxes",
                          "UsefulMorePeopleFollowedGuidelines", "UsefulNoMoreHighRiskVulnerableTerms", 
                          "UsefulNoneAboveJustTime", "UsefulNoneAboveNotWantGoBack", "CurrentApproachToManagingRisk",
                          "ApproachMainlyDrivenFearInfection", "ApproachInfluenceFromShieldingAdvice",
@@ -171,5 +257,4 @@ secondary_variables <- c("WorriedButNoLongerHighestRisk",
 selections <- NA
 
 make_crosstab(primary_variable, secondary_variables, selections)
-
 
