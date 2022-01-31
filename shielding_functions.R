@@ -1,5 +1,8 @@
 # Shielding functions
-
+naans = c("Not applicable", "NA", "N/A", 
+          "I am not sure / Not applicable",
+          "I am not sure", NA,
+          "I am not sure / I haven't needed social care support")   ## Possible not applicable answers
 
 # Function to get counts from data
 gen.data <- function(x, wts = NA){
@@ -52,10 +55,6 @@ pull_question_data <- function(keyword, qstoignore = c(), checktotals = TRUE, mu
 
 # Function to add percentages
 add_percentages <- function(df, multivar=TRUE){
-  
-  naans = c("Not applicable", "NA", "N/A", 
-            "I am not sure / Not applicable",
-            "I am not sure", NA)   ## Possible not applicable answers
   
   # Define not in operator
   `%!in%` <- Negate(`%in%`)
