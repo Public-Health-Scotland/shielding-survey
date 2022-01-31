@@ -31,6 +31,6 @@
     - SeverelyImmunosuppressed: based off SeverelyImmunosuppressed and AdvisedGPImmunosuppressed
     - WorriedButNoLongerHighestRisk: based off CurrentApproachToManagingRisk and SeverelyImmunosuppressed
 5. We then made frequency tables of the different variables and groups of variables, both weighted and unweighted. This is done using the script shielding_analysis_weighted.R
-
+6. We then made crosstabs comparing each variable with several other variables. This is done using the script make_crosstabs.R
 
 
