@@ -242,7 +242,9 @@ secondary_variables <- c("UsefulMentalHealthSupport","UsefulPhysicalHealthSuppor
                          "ApproachMainlyDrivenFearInfection", "ApproachInfluenceFromShieldingAdvice",
                          "ApproachNoDependenceSGovAdvice", "ApproachLessAfraidSinceVaccine", 
                          "ApproachHardToTrustGuidanceWhichSaysSafe", "SGSafeToWork" , "SGSafePublicTransport",
-                         "SGSafeYoungSchoolUniChildcare", "SGSafeSameRestPopulation", "HowSeeFuture"
+                         "SGSafeYoungSchoolUniChildcare", "SGSafeSameRestPopulation", "HowSeeFuture",
+                         "FutureHRWebpage", "FutureChiefMedicalOfficerLetter", "FutureSMSShieldingUpdates", 
+                         "FutureHRGroup"
  )
 selections <- NA
 
