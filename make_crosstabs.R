@@ -117,7 +117,7 @@ make_crosstab(primary_variable, secondary_variables, selections)
 # ---------------------------------------------------------------------------------------------
 primary_variable <- "UnexpectedExpenseDifficulty"
 secondary_variables <- c("InitialShieldingQualityOfLife", "InitialShieldingMentalHealth",
-                         "HRNFinancE", "WorriedButNoLongerHighestRisk",
+                         "InitialShieldingFinance", "WorriedButNoLongerHighestRisk",
                          "SeverelyImmunosuppressed", "ADSupportSinceShielding", 
                          "DifficultyGettingSocialCareSupport", "SGSafePublicTransport",
                          "ChangesEndFreeFoodBoxes")
