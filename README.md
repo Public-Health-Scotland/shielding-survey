@@ -1,5 +1,5 @@
 # Analysis of high risk group shielding survey for Public Health Scotland
-
+[Find the publication here](https://www.publichealthscotland.scot/publications/covid-19-shielding-programme-scotland-impact-and-experience-survey-part-two/covid-19-shielding-programme-scotland-impact-and-experience-survey-part-two-30-march-2022/)
 ## Workflow
 
 1. The uncleaned survey data are confidential so unprovided, but are stored locally in a password protected spreadsheet
